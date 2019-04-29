@@ -44,7 +44,7 @@ DB_PASS=YOUR_DATABASE_PASSWORD
 
 __Then__ run:
 
-''' node server.js '''
+``` node server.js ```
 
 ### The routes
 
