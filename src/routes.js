@@ -75,4 +75,18 @@ router.post("/submit_category", (req, res) => {
   res.redirect("/")
 })
 
+router.post("/delete/:ideas_id", (req, res) => {
+  const ideas_id = req.params.ideas_id
+  queryString = "DELETE from ideas WHERE ideas_id = ?"
+  dbConnection.query(queryString, [ideas_id], (err, results, field) => {
+    if (err) {
+      console.log("Failed to delete idea " + err)
+      return
+    }
+    console.log("Deleted idea" + results)
+  })
+  res.redirect("/ideas")
+
+})
+
 module.exports = router

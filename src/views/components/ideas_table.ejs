@@ -11,6 +11,13 @@
       <tr>
         <td><%= idea.time_submitted %></td>
         <td><%= idea.category %></td>
+        <td>
+        <form method="POST" action="/delete/<%= idea.ideas_id %>">
+          <button>
+            <%= idea.ideas_id %>
+          </button>
+        </form>
+        </td>
         <td><%= idea.idea %></td>
       </tr>
       <% }) %>
