@@ -1,4 +1,4 @@
-# Ideas Bucket
+# Idea Bucket
 
 A node js application for submitting ideas to.
 
