@@ -1,4 +1,3 @@
-
 const express = require('express')
 const mysql = require('mysql')
 const router = express.Router()
@@ -87,6 +86,23 @@ router.post("/delete/:ideas_id", (req, res) => {
   })
   res.redirect("/ideas")
 
+})
+
+router.post("/api/submit_idea", (req, res) => {
+  idea = req.body.idea
+  category = req.body.category
+
+  queryString = "INSERT INTO ideas (idea, category) \
+  VALUES (?, ?)"
+  dbConnection.query(queryString, [idea, category], (err, results, field) => {
+    if (err) {
+      console.log("Failed to submit idea. " + err)
+      return
+    }
+    console.log("Logged new idea " + results)
+  })
+  console.log("hi?")
+  res.send("Great Success")
 })
 
 module.exports = router

@@ -13,6 +13,7 @@ app.set('view engine', 'ejs')
 const middlewares = [
   layout(),
   express.static(path.join(__dirname, 'public')),
+  bodyParser.json(),
   bodyParser.urlencoded({extended: false})
 ]
 app.use(middlewares)
