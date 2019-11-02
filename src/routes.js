@@ -101,8 +101,19 @@ router.post("/api/submit_idea", (req, res) => {
     }
     console.log("Logged new idea " + results)
   })
-  console.log("hi?")
   res.send("Great Success")
+})
+
+router.get("/api/ideas", (req, res) => {
+  const queryString = "SELECT * FROM ideas"
+  dbConnection.query(queryString, (err, rows, fields) => {
+    if (err) {
+      console.log("Failed to query for /get_ideas: " + err)
+    }
+    console.log("Getting data from database for /get_ideas")
+    res.send({ ideas: rows })
+  })
+
 })
 
 module.exports = router
