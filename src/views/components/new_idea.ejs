@@ -10,9 +10,11 @@
     <input type="text" class="form-control" name="category" placeholder="Category" list="category_list" id="category"/>
   </div>
   <datalist id="category_list">
-    <% categories.forEach((category) => {%>
-      <option value=<%= category.category %>>
-    <% }) %>
+	<% if (categories) { %>
+		<% categories.forEach((category) => {%>
+		  <option value=<%= category.category %>>
+		<% }) %>
+	<% } %>
   </datalist>
 
   <button type="submit" id="new_idea_btn" class="btn btn-lg btn-success btn-block">Submit Idea</button>
