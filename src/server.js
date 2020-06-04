@@ -40,8 +40,6 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser((id, done) => {
-    console.log('Inside deserializeUser callback')
-    console.log(`The user id passport saved in the session file store is: ${id}`)
     const user = users[0].id === id ? users[0] : false;
     done(null, user);
 });
@@ -59,8 +57,6 @@ app.use(middlewares)
 
 app.use(session({
   genid: (req) => {
-      console.log('Inside the session middleware')
-      console.log(req.sessionID)
       return uniqid()
   },
   store: new FileStore(),

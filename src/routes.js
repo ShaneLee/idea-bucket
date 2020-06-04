@@ -16,10 +16,14 @@ function getDBConnection(database) {
   })
 }
 
-router.get('/', (req, res) => {
+const checkLoggedIn = (req, res) => {
   if (!req.isAuthenticated()) {
     res.redirect('/login')
   }
+}
+
+router.get('/', (req, res) => {
+  checkLoggedIn(req, res)
   const queryString = 'SELECT * FROM categories'
   dbConnection.query(queryString, (err, rows, fields) => {
     if (err) {
@@ -47,6 +51,7 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/ideas', (req, res) => {
+  checkLoggedIn(req, res)
   const queryString = 'SELECT * FROM ideas'
   dbConnection.query(queryString, (err, rows, fields) => {
     if (err) {
@@ -59,11 +64,13 @@ router.get('/ideas', (req, res) => {
 })
 
 router.get('/category', (req, res) => {
+  checkLoggedIn(req, res)
   res.render('./pages/category')
 })
 
 
 router.post('/submit_idea', (req, res) => {
+  checkLoggedIn(req, res)
   idea = req.body.idea
   category = req.body.category
 
@@ -80,6 +87,7 @@ router.post('/submit_idea', (req, res) => {
 })
 
 router.post('/submit_category', (req, res) => {
+  checkLoggedIn(req, res)
   category = req.body.category
 
   queryString = 'INSERT INTO categories (category) \
@@ -95,6 +103,7 @@ router.post('/submit_category', (req, res) => {
 })
 
 router.post('/delete/:ideas_id', (req, res) => {
+  checkLoggedIn(req, res)
   const ideas_id = req.params.ideas_id
   queryString = 'DELETE from ideas WHERE ideas_id = ?'
   dbConnection.query(queryString, [ideas_id], (err, results, field) => {
@@ -109,6 +118,7 @@ router.post('/delete/:ideas_id', (req, res) => {
 })
 
 router.post('/api/submit_idea', (req, res) => {
+  checkLoggedIn(req, res)
   idea = req.body.idea
   category = req.body.category
 
@@ -125,6 +135,7 @@ router.post('/api/submit_idea', (req, res) => {
 })
 
 router.get('/api/ideas', (req, res) => {
+  checkLoggedIn(req, res)
   const queryString = 'SELECT * FROM ideas'
   dbConnection.query(queryString, (err, rows, fields) => {
     if (err) {
