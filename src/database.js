@@ -13,18 +13,26 @@ const getDBConnection = (database) => {
 
 const con = getDBConnection('idea_bucket')
 
+const promiseFunction = (queryFn) => {
+  return Promise((resolve, reject) => resolve(queryFn)
+}
+
+const queryFunction = (queryString, endpoint) => {
+  con.query(queryString, (err, rows, fields) => {
+    if (err) {
+      console.log(`Failed to query for ${endpoint}: ${err}`)
+      return []
+    }
+    console.log(`Getting data from database for ${endpoint}`)
+    return rows
+  })
+} 
+
 const db = module.exports = {}
 
 db.getIdeas = () => {
   const queryString = 'SELECT * FROM ideas'
-  con.query(queryString, (err, rows, fields) => {
-    if (err) {
-      console.log('Failed to query for /get_ideas: ' + err)
-      return []
-    }
-    console.log('Getting data from database for /get_ideas')
-    return rows
-  })
+  return promiseFunction(queryFunction('SELECT * FROM ideas', '/get_ideas')).then(rows -> rows)
 }
 
 db.getCategories = () => {
