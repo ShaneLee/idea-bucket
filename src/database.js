@@ -1,15 +1,14 @@
 const mysql = require('mysql')
 require('dotenv').config()
 
-const getDBConnection = (database) => {
-  return mysql.createConnection({
+const getDBConnection = (database) =>
+	 mysql.createConnection({
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: database
   })
-}
 
 const con = getDBConnection('idea_bucket')
 
