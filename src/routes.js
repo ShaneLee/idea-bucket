@@ -5,14 +5,12 @@ const passport = require('passport')
 const db = require('./database')
 
 const checkLoggedIn = (req, res) => {
-  if (!req.isAuthenticated()) {
-    res.redirect('/login')
-  }
+	if (!req.isAuthenticated()) { res.redirect('/login') }
 }
 
 router.get('/', (req, res) => {
   checkLoggedIn(req, res)
-  res.render('index', { categories: db.getCategories() })
+  db.getCategories(res, 'index')
 })
 
 router.get('/login', (req, res) => {
@@ -21,11 +19,11 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-          if(info) {return res.send(info.message)}
+          if (info) { return res.send(info.message)}
           if (err) { return next(err) }
           if (!user) { return res.redirect('/login') }
           req.login(user, (err) => {
-                  if (err) { return next(err); }
+                  if (err) { return next(err) }
                   return res.redirect('/')
                 })
         })(req, res, next)
@@ -44,33 +42,33 @@ router.get('/category', (req, res) => {
 
 router.post('/submit_idea', (req, res) => {
   checkLoggedIn(req, res)
-  db.submitIdea(req.body.idea, req.body.category)
+  db.submitIdea([req.body.idea, req.body.category])
   res.redirect('/')
 })
 
 router.post('/submit_category', (req, res) => {
   checkLoggedIn(req, res)
-  category = req.body.category
+  db.submitCategory([category])
   res.redirect('/')
 })
 
 router.post('/delete/:ideas_id', (req, res) => {
   checkLoggedIn(req, res)
-  db.deleteIdea(req.params.ideas_id)
+  db.deleteIdea([req.params.ideas_id])
   res.redirect('/ideas')
 
 })
 
 router.post('/api/submit_idea', (req, res) => {
   checkLoggedIn(req, res)
-  if (db.submitIdea(req.body.idea, req.body.category)) {
+  if (db.submitIdea([req.body.idea, req.body.category])) {
     res.send('Great Success')
   }
 })
 
 router.get('/api/ideas', (req, res) => {
   checkLoggedIn(req, res)
-  res.send({ ideas: db.getIdeas() })
+  db.getIdeas(res, '/api/ideas')
 })
 
 module.exports = router

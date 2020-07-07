@@ -19,66 +19,28 @@ const resObject = (key, rows) => {
 	return obj
 }
 
-
-const queryFunction = (queryString, endpoint, res, page, key) => {
-  con.query(queryString, (err, rows, fields) => {
+const query = (err, rows, endpoint, res, page, key) => {
     if (err) {
       console.log(`Failed to query for ${endpoint}: ${err}`)
       return []
     }
-    console.log(`Getting data from database for ${endpoint}`)
-    res.render(page, resObject(key, rows))
-  })
-} 
+	if (!page) { return } 
+	else if (page.includes('api')) { res.send(page, resObject(key, rows)) }
+	else { res.render(page, resObject(key, rows)) }
+}
+
+const modify = (queryString, params, endpoint) => con.query(queryString, params, (err, results, field) => query(err, rows, endpoint, null, null, null))
+
+const select = (queryString, endpoint, res, page, key) => con.query(queryString, (err, rows, fields) => query(err, rows, endpoint, res, page, key))
 
 const db = module.exports = {}
 
-db.getIdeas = (res, page) => queryFunction('SELECT * FROM ideas', '/get_ideas', res, page, 'ideas')
+db.getIdeas = (res, page) => select('SELECT * FROM ideas', '/get_ideas', res, page, 'ideas')
 
+db.getCategories = (res, page) => select( 'SELECT * FROM categories', 'get_categories', res, page, 'categories')
 
-db.getCategories = () => {
-  const queryString = 'SELECT * FROM categories'
-  con.query(queryString, (err, rows, fields) => {
-    if (err) {
-      console.log('Failed to query for /: ' + err)
-    }
-    console.log('Getting data from database for /')
-    return rows
-  })
-}
+db.submitIdea = (params) => modify('INSERT INTO ideas (idea, category) VALUES (?, ?)', params, '/submitIdea')
 
-db.submitIdea = (idea, category) => {
-  queryString = 'INSERT INTO ideas (idea, category) VALUES (?, ?)'
-  con.query(queryString, [idea, category], (err, results, field) => {
-    if (err) {
-      console.log('Failed to submit idea. ' + err)
-      return
-    }
-    const result ='Logged new idea ' + results
-    console.log(result)
-    return result
-  })
-}
+db.submitCategory = (params) => modify('INSERT INTO categories (category) VALUES (?)', params, '/submitCategory')
 
-db.submitCategory = (category) => {
-  queryString = 'INSERT INTO categories (category) VALUES (?)'
-  con.query(queryString, [category], (err, results, field) => {
-    if (err) {
-      console.log('Failed to submit category. ' + err)
-      return
-    }
-    console.log('Logged new category ' + results)
-  })
-}
-
-db.deleteIdea = (id) => {
-  queryString = 'DELETE from ideas WHERE ideas_id = ?'
-  con.query(queryString, [id], (err, results, field) => {
-    if (err) {
-      console.log('Failed to delete idea ' + err)
-      return
-    }
-    console.log('Deleted idea' + results)
-  })
-  
-}
+db.deleteIdea = (params) => modify('DELETE from ideas WHERE ideas_id = ?', params, '/deleteIdea')
