@@ -29,7 +29,7 @@ const query = (err, rows, endpoint, res, page, key) => {
 	else { res.render(page, resObject(key, rows)) }
 }
 
-const modify = (queryString, params, endpoint) => con.query(queryString, params, (err, results, field) => query(err, rows, endpoint, null, null, null))
+const modify = (queryString, params, endpoint) => con.query(queryString, params, (err, results, field) => query(err, results, endpoint, null, null, null))
 
 const select = (queryString, endpoint, res, page, key) => con.query(queryString, (err, rows, fields) => query(err, rows, endpoint, res, page, key))
 
