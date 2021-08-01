@@ -69,6 +69,6 @@ app.use(passport.session())
 
 app.use('/', routes)
 
-app.listen(1200, () => {
-  console.log(`App running on port 1200`)
+app.listen(process.env.APP_PORT, () => {
+  console.log(`App running on port ${process.env.APP_PORT}`)
 })
