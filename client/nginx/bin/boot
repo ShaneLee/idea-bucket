@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#
+# boot component
+#
+# Provides Docker container entrypoint.
+#
+# Specifically, provides key behaviours:
+#
+# - Runs nginx.
+#
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# exec recommended
+# See https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#entrypoint
+exec nginx -g "daemon off;"
+

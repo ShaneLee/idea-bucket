@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useRouter } from 'next/router'
 import * as React from 'react';
 
 import IdeasTable from '@/components/IdeasTable';
@@ -14,7 +15,7 @@ import {
 
 export default function ComponentsPage() {
   const themeContext = React.useContext(ThemeContext);
-
+  const router = useRouter()
 
   return (
     <ThemeProvider>
@@ -35,7 +36,7 @@ export default function ComponentsPage() {
               <div className='mt-8 flex flex-wrap gap-2'>
               </div>
               
-              <IdeasTable />
+              <IdeasTable category={typeof router.query.category === 'string' ? router.query.category : undefined}/>
     
             </div>
           </section>

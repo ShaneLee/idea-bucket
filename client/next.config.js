@@ -4,18 +4,13 @@ module.exports = {
     dirs: ['src'],
   },
   env: {
-    MAPBOX_ACCESS_TOKEN:
-      'pk.eyJ1Ijoic2hhbmVsZWVlIiwiYSI6ImNqd2RzbDQ2bzE1ejQ0OG1vOWNhaWk0a3YifQ.nZMoPave66hDIrmD9OgbzA',
+    NEXT_PUBLIC_MODE: 'dev',
+  },
+  experimental:  {
+    outputStandalone: true,
   },
 
   reactStrictMode: true,
-
-  // Uncoment to add domain whitelist
-  // images: {
-  //   domains: [
-  //     'res.cloudinary.com',
-  //   ],
-  // },
 
   // SVGR
   webpack(config) {
@@ -43,7 +38,7 @@ module.exports = {
         },
         {
             source: "/prod/rest/v1/ideas",
-            destination: "http://localhost:8000/rest/v1/ideas",
+            destination: "http://idea-bucket-server:8080/rest/v1/ideas",
         },
         {
             source: "/dev/rest/v1/submitIdea",
@@ -51,7 +46,7 @@ module.exports = {
         },
         {
             source: "/prod/rest/v1/submitIdea",
-            destination: "http://localhost:8000/rest/v1/submitIdea",
+            destination: "http://idea-bucket-server:8080/rest/v1/submitIdea",
         },
         {
             source: "/dev/rest/v1/delete",
@@ -59,7 +54,7 @@ module.exports = {
         },
         {
             source: "/prod/rest/v1/delete",
-            destination: "http://localhost:8000/rest/v1/delete",
+            destination: "http://idea-bucket-server:8080/rest/v1/delete",
         },
         {
             source: "/dev/rest/v1/register",
@@ -67,23 +62,31 @@ module.exports = {
         },
         {
             source: "/prod/rest/v1/register",
-            destination: "http://localhost:8000/rest/v1/register",
+            destination: "http://idea-bucket-server:8080/rest/v1/register",
         },
         {
             source: "/dev/rest/v1/login",
             destination: "http://localhost:8080/rest/v1/login",
         },
         {
-            source: "/prod/rest/v1/login/",
-            destination: "http://localhost:8000/rest/v1/login",
+            source: "/prod/rest/v1/login",
+            destination: "http://idea-bucket-server:8080/rest/v1/login",
         },
         {
             source: "/dev/rest/v1/login/:token",
             destination: "http://localhost:8080/rest/v1/login/:token",
         },
         {
-            source: "/prod/rest/v1/login",
-            destination: "http://localhost:8000/rest/v1/login/:token",
+            source: "/prod/rest/v1/login/:token",
+            destination: "http://idea-bucket-server:8080/rest/v1/login/:token",
+        },
+        {
+            source: "/dev/rest/v1/logout",
+            destination: "http://localhost:8080/rest/v1/logout",
+        },
+        {
+            source: "/prod/rest/v1/logout/",
+            destination: "http://idea-bucket-server:8080/rest/v1/logout",
         },
         {
             source: "/dev/rest/v1/accountSettings",
@@ -91,7 +94,25 @@ module.exports = {
         },
         {
             source: "/prod/rest/v1/accountSettings",
-            destination: "http://localhost:8000/rest/v1/accountSettings",
+            destination: "http://idea-bucket-server:8080/rest/v1/accountSettings",
+        },
+        {
+
+            source: "/dev/rest/v1/supportRequest",
+            destination: "http://localhost:8080/rest/v1/supportRequest",
+        },
+        {
+            source: "/prod/rest/v1/accountSettings",
+            destination: "http://idea-bucket-server:8080/rest/v1/supportRequest",
+        },
+        {
+
+            source: "/dev/rest/v1/subscribe",
+            destination: "http://localhost:8080/rest/v1/subscribe",
+        },
+        {
+            source: "/prod/rest/v1/subscribe",
+            destination: "http://idea-bucket-server:8080/rest/v1/subscribe",
         }
     ];
 	},

@@ -3,6 +3,7 @@ import { Form,Formik } from 'formik'
 import * as React from 'react';
 
 import Button from '@/components/buttons/Button';
+import GenericMenu from '@/components/GenericMenu'
 
 import FetchClient from '@/api/FetchClient'
 import { AuthContext } from '@/context/AuthContext';
@@ -11,6 +12,7 @@ import { themeBg, ThemeContext, themeText } from '@/context/Theme';
 type AccountSettings = {
   userId: string
   emailsEnabled: boolean
+  emailFrequency: string
 }
 
 export default function AccountSettingsPage() {
@@ -19,15 +21,16 @@ export default function AccountSettingsPage() {
 
   const [ accountSettings, setAccountSettings] = React.useState<AccountSettings>(
    { 
-     userId: 'me@shanel.ee',
-     emailsEnabled: false
+     userId: '',
+     emailsEnabled: false,
+     emailFrequency: ''
    })
 
   const onSubmit = () => FetchClient.put(`/${process.env.NEXT_PUBLIC_MODE}/rest/v1/accountSettings`, accountSettings)
 
   React.useEffect(() => {
       FetchClient.get(`/${process.env.NEXT_PUBLIC_MODE}/rest/v1/accountSettings`)
-        .then((res) => res.json())
+        .then((res) => res?.json())
         .then(setAccountSettings)
   }, [])
 
@@ -39,7 +42,6 @@ export default function AccountSettingsPage() {
               id='account-settings'
               className='space-y-4'
               >
-            { authContext.authState.subscribed ?
               <div className='space-x-2'>
                 <label
                   htmlFor='emails-enabled'
@@ -56,7 +58,20 @@ export default function AccountSettingsPage() {
                 id='emails-enabled-checkbox'
                 />
               </div>
-              : <div></div>
+            { authContext.authState.role === 'ROLE_BUCKET_SUBSCRIBED' &&
+              <div className='space-x-2'>
+                <label
+                  htmlFor='emails-frequency'
+                  className={clsx('rounded', themeText(themeContext.theme), themeBg(themeContext.theme))}
+                >
+                E-mails frequency
+                </label>
+                <GenericMenu 
+                  items={['Weekly', 'Monthly']}
+                  selected='Weekly'
+                  setSelected={selected => setAccountSettings({...accountSettings, 'emailFrequency': selected})}
+                />
+              </div>
             }
             <Button
               id='save-account-settings'

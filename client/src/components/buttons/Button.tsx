@@ -5,6 +5,7 @@ import clsxm from '@/lib/clsxm';
 
 export enum ButtonVariant {
   'primary',
+  'primary-outline',
   'outline',
   'ghost',
   'light',
@@ -50,6 +51,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               'hover:bg-primary-600 hover:text-white',
               'active:bg-primary-500',
               'disabled:bg-primary-400 disabled:hover:bg-primary-400',
+            ],
+            variant === 'primary-outline' && [
             ],
             variant === 'outline' && [
               'text-primary-500',

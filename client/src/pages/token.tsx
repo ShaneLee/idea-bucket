@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
 import Button from '@/components/buttons/Button'
+import Layout from '@/components/layout/Layout';
 
 import { AuthContext } from '@/context/AuthContext'
 import {
@@ -11,6 +12,7 @@ import {
  themeButton,
  ThemeContext,
  themeText } from '@/context/Theme';
+import processToken from '@/services/TokenService'
 
 import FetchClient from '../api/FetchClient'
 
@@ -31,8 +33,9 @@ export default function LoginTokenPage() {
     .then(_ => {
         const token = router.query.token
         if (!!token && typeof token === 'string') {
+          const result = processToken(token)
           localStorage.setItem('token', token) 
-          authState.setAuthState({...authState.authState, loggedIn: true})
+          authState.setAuthState({...authState.authState, name: result.name, role: result.role, loggedIn: true})
           onRedirect('/')
         }
       })
@@ -59,26 +62,34 @@ export default function LoginTokenPage() {
 
 
   return (
-    <Formik initialValues={{}}
-      onSubmit={() => onSubmit()}>
-        {() => (
-          <Form>
-            <div className={clsx('flex flex-col h-screen my-auto items-center space-y-6', themeBg(themeContext.theme))}>
-              {displayLoginError(state)}
-              <div className=''>
-              <p className={themeText(themeContext.theme)}>You are being redirected</p>
-                <div className=''>
-                  <Button
-                    className=''
-                    variant={themeButton(themeContext.theme)}
-                    type='submit'>
-                  Login
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Form>
-        )}
-    </Formik>
+    <Layout>
+      <main>
+        <section className={themeBg(themeContext.theme)}>
+        <div className='layout flex min-h-screen flex-col items-center justify-center text-center space-y-4'>
+          <Formik initialValues={{}}
+            onSubmit={() => onSubmit()}>
+              {() => (
+                <Form>
+                  <div className={clsx('flex flex-col h-screen my-auto items-center space-y-6', themeBg(themeContext.theme))}>
+                    {displayLoginError(state)}
+                    <div className=''>
+                    <p className={themeText(themeContext.theme)}>You are being redirected</p>
+                      <div className=''>
+                        <Button
+                          className=''
+                          variant={themeButton(themeContext.theme)}
+                          type='submit'>
+                        Login
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Form>
+          )}
+      </Formik>
+    </div>
+    </section>
+    </main>
+    </Layout>
   )
 }
