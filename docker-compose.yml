@@ -1,23 +1,39 @@
-version: "3.3"
+---
+version: "3"
+
+networks:
+  services:
+    driver: overlay
+  db:
+    driver: overlay
+
 services:
-  mysql:
-    ports:
-      -  "9500:3306"
-    command: --default-authentication-plugin=mysql_native_password
-    expose:
-      - "9500"
-    restart: always
-    volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+  idea-bucket-client:
+    image: idea-bucket-client
     environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_TCP_PORT: 9500
-    image: "mysql:5.7.35"
-    container_name: "mysql"
-  idea_bucket:
+      - "NEXT_PUBLIC_MODE=prod"
+    networks:
+      - services
     ports:
-      -  "1200:1200"
-    restart: always
-    image: "shane/idea_bucket:latest"
-    depends_on:
-      - "mysql"
+      - 80:3000
+  idea-bucket-server:
+    image: idea-bucket-server
+    ports:
+      - 8080:8080
+    networks:
+      - services
+      - db
+    environment:
+      - "MONGO_DB_HOST=mongo"
+      - "EMAIL_SENDER=me@shanel.ee"
+      - "SPRING_MAIL_HOST=smtp.zoho.eu"
+      - "SPRING_MAIL_USERNAME=me@shanel.ee"
+      - "SPRING_MAIL_PASSWORD=${MAIL_PASS}"
+      - "SPRING_MAIL_PORT=465"
+      - "EMAIL_SUPPORT_DESTINATION=me@shanel.ee"
+  mongo:
+    image: mongo:5.0.6
+    ports:
+      - 27017:27017
+    networks:
+      - db

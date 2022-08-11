@@ -1,0 +1,3 @@
+[submodule "idea_bucket_server"]
+	path = idea_bucket_server
+	url = https://github.com/ShaneLee/idea_bucket_server.git
